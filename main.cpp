@@ -73,8 +73,12 @@ Node* constructSyntaxTree(string regex) {
                     i=i+1;
                 }
             else
-            {if(!stack.empty() && (!is_op(stack.top()->data) || stack.top()->data=='.'))
-                        stack.push(createNode('.'));stack.push(constructSyntaxTree(temp));}
+            {if(!stack.empty() && (!is_op(stack.top()->data) || stack.top()->data=='.') )
+                        stack.push(createNode('.'));
+            else if(stack.size()==1 && is_op(stack.top()->data))
+                        stack.push(createNode('.'));
+
+            stack.push(constructSyntaxTree(temp));}
         }
         else if(!is_op(c))
         {
@@ -92,8 +96,16 @@ Node* constructSyntaxTree(string regex) {
             }
             else if(stack.top()->data=='|')
             {
-                Node *nn=createNode(c);
-                stack.push(nn);
+                if(stack.size()>1)
+                    {Node *nn=createNode(c);
+                    stack.push(nn);}
+                else
+                    {
+                        Node *on=createNode('.');
+                        stack.push(on);
+                        Node *nn=createNode(c);
+                        stack.push(nn);
+                    }
             }
             else if(stack.top()->data=='*' || stack.top()->data=='.')
             {
