@@ -67,6 +67,8 @@ Node* constructSyntaxTree(string regex) {
                         stack.push(createNode('.'));
                     else if(!stack.empty() && stack.top()->data=='*')
                         stack.push(createNode('.'));
+                    else if(stack.size()==1 && is_op(stack.top()->data))
+                        stack.push(createNode('.'));
                     Node *nn=createNode('*');
                     nn->left=constructSyntaxTree(temp);
                     stack.push(nn);
